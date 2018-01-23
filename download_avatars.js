@@ -30,9 +30,7 @@ function downloadImageByURL(url, filePath) {
       throw err;
     })
     .on('response', function (response) {
-      // console.log('Downloading image...');
       console.log('Response Status Code: ', response.statusCode);
-      // console.log('Download complete.');
     })
     .pipe(fs.createWriteStream(filePath));
 }
@@ -41,12 +39,16 @@ if (!repoOwner || !repoName) {
   noEmptyVariables();
 }
 
+
+
 getRepoContributors(repoOwner, repoName, function(err, result) {
   console.log("Errors:", err);
-  // console.log("Result:", result);
+  var avatarsFolder = './avatars';
+  if (!fs.existsSync(avatarsFolder)){
+    fs.mkdirSync(avatarsFolder);
+  }
   result.forEach( function(userinfo){
-    downloadImageByURL(userinfo.avatar_url, './avatars' + userinfo.login + '.jpg');
-    // console.log(userinfo.avatar_url);
+    downloadImageByURL(userinfo.avatar_url, avatarsFolder + '/' + userinfo.login + '.jpg');
   });
 });
 
