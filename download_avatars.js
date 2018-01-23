@@ -5,6 +5,10 @@ var fs = require('fs');
 var repoOwner = process.argv[2];
 var repoName = process.argv[3];
 
+function noEmptyVariables() {
+  console.log('Danger Will Robinson! E.g. Please enter a valid repoOwner and repoName.');
+}
+
 console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
@@ -33,7 +37,9 @@ function downloadImageByURL(url, filePath) {
     .pipe(fs.createWriteStream(filePath));
 }
 
-
+if (!repoOwner || !repoName) {
+  noEmptyVariables();
+}
 
 getRepoContributors(repoOwner, repoName, function(err, result) {
   console.log("Errors:", err);
@@ -43,3 +49,5 @@ getRepoContributors(repoOwner, repoName, function(err, result) {
     // console.log(userinfo.avatar_url);
   });
 });
+
+
